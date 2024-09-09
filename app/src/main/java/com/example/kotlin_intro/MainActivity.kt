@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,10 +29,69 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            kotlin_introTheme {
-                // A surface container using the 'background' color from the theme
-                Portfo()
+            MyApp()
+        }
+    }
+}
+
+@Composable
+fun MyApp(){
+    kotlin_introTheme {
+        // A surface container using the 'background' color from the theme
+//        Portfo()
+        Surface(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            ScreenWidget()
+        }
+    }
+}
+
+@Composable
+fun ScreenWidget(){
+
+    var counter = remember {
+        mutableStateOf(1);
+    }
+
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            "${counter.value * 100}",
+            fontWeight = FontWeight.Normal,
+//            fontSize = 40.sp
+        )
+        Spacer(modifier = Modifier.size(120.dp))
+
+        CustomButton{
+            counter.value++
+        }
+
+    }
+}
+
+
+
+@Composable
+fun CustomButton(onClick : () -> Unit){
+
+    Card(
+        shape = CircleShape,
+        backgroundColor = Color.Cyan,
+        modifier = Modifier
+            .size(100.dp)
+            .clickable {
+                onClick.invoke()
             }
+    ){
+        Box(modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+            Text(text = "Tap", fontWeight = FontWeight.Bold)
         }
     }
 }
@@ -114,7 +174,9 @@ fun Portfo() {
 @Composable
 fun ProjectItem(project: Project){
     Row(
-        modifier = Modifier.fillMaxWidth().padding(8.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
     ) {
         Image(painter = painterResource(id = R.drawable.profile), contentDescription = null,
             modifier = Modifier
